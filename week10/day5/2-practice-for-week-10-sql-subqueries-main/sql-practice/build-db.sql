@@ -44,7 +44,7 @@ VALUES
   ('Bella', 2020),
   ('Tiger', 2012),
   ('Oscar', 2010),
-  ('Garfield', 2009),
+  ('Garfield', 2012),
   ('Crookshanks', 2017);
 
 INSERT INTO toys
