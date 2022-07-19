@@ -5,6 +5,15 @@
 
     -- Your code here
 
+    select cats.name from cat_toys
+    join cats on (cats.id = cat_id)
+    where toy_id = 5;
+
+    -- SELECT cats.name, toys.id, toys.name FROM cats 
+    -- JOIN cat_toys ON (cat_toys.cat_id = cats.id)
+    -- JOIN toys ON (cat_toys.toy_id = toys.id)
+    -- WHERE toys.id = 5;
+
 -- Paste your results below (as a comment):
 
 
@@ -16,9 +25,15 @@
 -- Query:
 
     -- Your code here
+    EXPLAIN QUERY PLAN
+    select cats.name from cat_toys
+    join cats on (cats.id = cat_id)
+    where toy_id = 5;
 
 -- Paste your results below (as a comment):
-
+-- QUERY PLAN
+--SCAN TABLE cat_toys
+--SEARCH TABLE cats USING INTEGER PRIMARY KEY (rowid=?)
 
 -- What do your results mean?
 
@@ -26,7 +41,7 @@
 
 
     -- What does that mean?
-
+-- We can increase efficiency by adding an index to cat_toys
 
 
 
@@ -36,9 +51,10 @@
 -- Query (to be used in the sqlite CLI):
 
     -- Your code here
+    CREATE INDEX idx_cat_toys_toy_id ON cat_toys(toy_id);
 
 -- Paste your results below (as a comment):
-
+-- Run Time: real 0.002 user 0.001336 sys 0.000218
 
 
 
@@ -52,6 +68,11 @@
 
 -- Analyze Query:
     -- Your code here
+
+    -- QUERY PLAN
+|--SEARCH TABLE cat_toys USING INDEX idx_cat_toys_toy_id (toy_id=?)
+-- `--SEARCH TABLE cats USING INTEGER PRIMARY KEY (rowid=?)
+-- Run Time: real 0.000 user 0.000114 sys 0.000097
 
 -- Paste your results below (as a comment):
 
