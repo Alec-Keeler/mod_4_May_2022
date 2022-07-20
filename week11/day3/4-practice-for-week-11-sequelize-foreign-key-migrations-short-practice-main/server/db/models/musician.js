@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Your code here
+      Musician.belongsTo(models.Band, {foreignKey: 'bandId'})
+      Musician.belongsToMany(models.Instrument, {
+        through: 'MusicianInstrument',
+        foreignKey: 'musicianId'
+      })
     }
   };
   Musician.init({
@@ -23,3 +28,6 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Musician;
 };
+
+// SELECT * FROM Musicians
+// JOIN Bands ON (Bands.id = Musicians.bandId)

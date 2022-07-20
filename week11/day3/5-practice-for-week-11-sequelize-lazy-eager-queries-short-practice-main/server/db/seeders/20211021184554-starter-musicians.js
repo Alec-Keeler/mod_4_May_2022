@@ -51,6 +51,7 @@ module.exports = {
         await band.createMusician(musician);
       }
     }
+    
   },
 
   down: async (queryInterface, Sequelize) => {

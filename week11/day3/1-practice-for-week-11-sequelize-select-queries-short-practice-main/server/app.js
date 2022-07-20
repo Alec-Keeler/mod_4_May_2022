@@ -22,6 +22,14 @@ app.get('/puppies', async (req, res, next) => {
     let allPuppies;
 
     // Your code here
+    allPuppies = await Puppy.findAll({
+        order: [
+            ['name', 'ASC']
+        ]
+    });
+
+    // SELECT *
+    // SELECT name
 
     res.json(allPuppies);
 });
@@ -34,6 +42,13 @@ app.get('/puppies/chipped', async (req, res, next) => {
     let chippedPuppies;
 
     // Your code here
+    chippedPuppies = await Puppy.findAll({
+        where: { microchipped: true },
+        order: [
+            ["age_yrs", "DESC"],
+            ["name", "ASC"],
+        ],
+    })
 
     res.json(chippedPuppies);
 });
@@ -42,10 +57,15 @@ app.get('/puppies/chipped', async (req, res, next) => {
 // STEP 3
 // One puppy matching a name param
 // Finding one record by attribute
-app.get('/puppies/name/:name', async (req, res, next) => {
+app.get('/puppies/name/:someString', async (req, res, next) => {
     let puppyByName;
     
     // Your code here
+    let name = req.params.someString;
+    console.log(req.params)
+    puppyByName = await Puppy.findOne({
+        where: { name }
+    });
 
     res.json(puppyByName);
 })
@@ -58,6 +78,13 @@ app.get('/puppies/shepherds', async (req, res, next) => {
     let shepherds;
     
     // Your code here
+    shepherds = await Puppy.findAll({
+        where: {
+            breed: {
+                [Op.endsWith]: 'Shepherd'
+            }
+        }
+    })
 
     res.json(shepherds);
 })
@@ -82,8 +109,13 @@ app.get('/puppies/:id', async (req, res, next) => {
     let puppyById;
     
     // Your code here
-    
-    res.json(puppyById);
+    let puppyId = req.params.id
+    puppyById = await Puppy.findByPk(puppyId)
+    if (puppyById) {
+        res.json(puppyById);
+    } else {
+        res.json({message: 'There is no puppy with that Id'})
+    }
 });
 
 
