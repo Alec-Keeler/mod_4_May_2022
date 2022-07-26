@@ -7,7 +7,7 @@ require('dotenv').config();
 require('express-async-errors');
 
 // Import the models used in these routes - DO NOT MODIFY
-const { Band, Musician } = require('./db/models');
+const { Band, Musician, Instrument } = require('./db/models');
 
 // Express using json - DO NOT MODIFY
 app.use(express.json());
@@ -18,6 +18,10 @@ app.use(express.json());
 app.get('/bands/latest', async (req, res, next) => {
     const bands = await Band.findAll({ 
         // Your code here
+        order: [
+            ['createdAt', 'DESC']
+        ],
+        attributes: ['name']
     });
     res.json(bands);
 })
@@ -27,6 +31,8 @@ app.get('/bands/latest', async (req, res, next) => {
 app.get('/musicians/alphabetic', async (req, res, next) => {
     const musicians = await Musician.findAll({ 
         // Your code here
+        attributes: ['firstName', 'lastName'],
+        order: [['lastName'], ['firstName']]
     });
     res.json(musicians);
 })
@@ -36,8 +42,18 @@ app.get('/musicians/alphabetic', async (req, res, next) => {
 // name, then first name, alphabetically
 app.get('/bands/alphabetic-musicians', async (req, res, next) => {
     const bands = await Band.findAll({ 
-        include: { model: Musician }, 
+        include: { 
+            model: Musician, 
+            attributes: ['lastName', 'firstName'],
+            include: {model: Instrument}
+        }, 
         // Your code here
+        order: [
+            ['name', 'ASC'],
+            [Musician, 'lastName', 'ASC'],
+            [Musician, 'firstName', 'ASC']
+        ],
+        attributes: ['name']
     })
     res.json(bands);
 })
