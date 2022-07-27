@@ -37,19 +37,22 @@ app.get('/test-benchmark-logging', async (req, res) => {   // > 100 ms execution
 app.get('/books', async (req, res) => {
 
     let books = await Book.findAll({
-        include: Author,
+        include: {model: Author, attributes: ['lastName']},
+        where: { price: { [Op.lt]: req.query.maxPrice } },
+        attributes: ['title', 'price']
     });
 
     // Filter by price if there is a maxPrice defined in the query params
-    if (req.query.maxPrice) {
-        books = books.filter(book => book.price < parseInt(req.query.maxPrice));
-    };
-    res.json(books);
+    // if (req.query.maxPrice) {
+    //     books = books.filter(book => book.price < parseInt(req.query.maxPrice));
+    // };
+    res.json(books); 
 });
 
     // 1a. Analyze:
 
         // Record Executed Query and Baseline Benchmark Below:
+        //  Elapsed time: 631ms
 
         // - What is happening in the code of the query itself?
 
@@ -71,6 +74,7 @@ app.get('/books', async (req, res) => {
 // 1d. Benchmark the Query after Refactoring
 
     // Record Executed Query and Baseline Benchmark Below:
+    // Elapsed time: 180ms  
 
     // Is the refactored query more efficient than the original? Why or Why Not?
 
